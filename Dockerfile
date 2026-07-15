@@ -13,7 +13,7 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-# Install dependencies
+# Install dependencies (CPU-only PyTorch; avoids large CUDA wheels on CPU-only hosts)
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Install the package

@@ -14,6 +14,22 @@ HMNI is trained on an internationally-transliterated Latin firstname dataset, wh
 pip install hmni
 ```
 
+For local development or Docker builds on CPU-only machines, install PyTorch from the CPU wheel index first to avoid pulling large CUDA builds:
+
+```bash
+pip install torch --index-url https://download.pytorch.org/whl/cpu
+pip install -r requirements.txt
+```
+
+Or use `requirements.txt` directly — it is configured for CPU-only PyTorch.
+
+If another project depends on `hmni` and builds on CPU-only hosts, add these lines at the top of that project's requirements file before `hmni` (or `torch`) so pip does not pull CUDA wheels:
+
+```text
+--index-url https://download.pytorch.org/whl/cpu
+--extra-index-url https://pypi.org/simple
+```
+
 ## Quick Usage Guide
 
 ### Initialize a Matcher Object
