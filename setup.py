@@ -1,4 +1,20 @@
-from setuptools import setup, find_packages
+from pathlib import Path
+
+from setuptools import find_packages, setup
+
+
+def load_requirements(path: str = "requirements.txt") -> list[str]:
+  """Load install_requires from requirements.txt (single source of truth)."""
+  requirements = []
+  for line in Path(path).read_text(encoding="utf-8").splitlines():
+    line = line.strip()
+    if not line or line.startswith("#") or line.startswith("--"):
+      continue
+    if line.startswith("git+"):
+      line = f"abydos @ {line}"
+    requirements.append(line)
+  return requirements
+
 
 setup(
     name="hmni",
@@ -11,17 +27,7 @@ setup(
     url="https://github.com/Christopher-Thornton/hmni",
     packages=find_packages(),
     include_package_data=True,
-    install_requires=[
-        "numpy",
-        "pandas",
-        "torch",
-        "joblib",
-        "unidecode",
-        "fuzzywuzzy",
-        "editdistance",
-        "abydos @ git+https://github.com/IlnarSelimcan/abydos",
-        "scikit-learn"
-    ],
+    install_requires=load_requirements(),
     python_requires=">=3.9",
     classifiers=[
         "Development Status :: 4 - Beta",

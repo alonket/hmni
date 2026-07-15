@@ -13,11 +13,10 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-# Install dependencies (CPU-only PyTorch; avoids large CUDA wheels on CPU-only hosts)
-RUN pip install --no-cache-dir -r requirements.txt
-
-# Install the package
-RUN pip install -e .
+# Install package and dependencies (CPU-only PyTorch; avoids large CUDA wheels)
+RUN pip install --no-cache-dir -e . \
+    --index-url https://download.pytorch.org/whl/cpu \
+    --extra-index-url https://pypi.org/simple
 
 # Set Python path
 ENV PYTHONPATH=/app
