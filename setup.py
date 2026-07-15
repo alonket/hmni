@@ -3,6 +3,12 @@ from pathlib import Path
 from setuptools import find_packages, setup
 
 
+# torch is omitted from install_requires so pip does not resolve it from PyPI's
+# default CUDA wheels when hmni is installed as a git dependency (e.g. in Docker).
+# Install CPU torch explicitly before hmni; see README.md.
+_INSTALL_EXCLUDES = {"torch"}
+
+
 def load_requirements(path: str = "requirements.txt") -> list[str]:
   """Load install_requires from requirements.txt (single source of truth)."""
   requirements = []
@@ -12,6 +18,10 @@ def load_requirements(path: str = "requirements.txt") -> list[str]:
       continue
     if line.startswith("git+"):
       line = f"abydos @ {line}"
+    name = line.split("@", 1)[0].split("[", 1)[0].strip()
+    name = name.partition(">")[0].partition("<")[0].partition("=")[0].partition("!")[0].strip()
+    if name in _INSTALL_EXCLUDES:
+      continue
     requirements.append(line)
   return requirements
 

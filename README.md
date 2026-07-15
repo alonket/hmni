@@ -28,11 +28,27 @@ Or install dependencies from `requirements.txt` (also configured for CPU-only Py
 pip install -r requirements.txt
 ```
 
-If another project depends on `hmni` and builds on CPU-only hosts, add these lines at the top of that project's requirements file before `hmni` (or `torch`):
+`torch` is **not** listed in `install_requires` (it would pull CUDA wheels from PyPI when hmni is installed from git). Install CPU PyTorch first, then hmni.
+
+### Another project (requirements.txt)
 
 ```text
 --index-url https://download.pytorch.org/whl/cpu
 --extra-index-url https://pypi.org/simple
+torch>=2.0.0
+hmni @ git+https://github.com/alonket/hmni.git
+```
+
+### Another project (Dockerfile)
+
+Install CPU PyTorch in its own layer before hmni:
+
+```dockerfile
+RUN pip install --no-cache-dir torch \
+    --index-url https://download.pytorch.org/whl/cpu \
+    --extra-index-url https://pypi.org/simple
+
+RUN pip install --no-cache-dir git+https://github.com/alonket/hmni.git
 ```
 
 ## Quick Usage Guide

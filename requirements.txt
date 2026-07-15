@@ -2,6 +2,7 @@
 --extra-index-url https://pypi.org/simple
 numpy>=1.24.0
 pandas>=2.0.0
+# torch: for local `pip install -r requirements.txt` only; excluded from install_requires (see setup.py)
 torch>=2.0.0
 joblib>=1.3.0
 unidecode>=1.3.6
